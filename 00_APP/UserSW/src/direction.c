@@ -1,69 +1,69 @@
+/*********************************************************************************************************************/
+/*-----------------------------------------------------Includes------------------------------------------------------*/
+/*********************************************************************************************************************/
 #include "00_APP/UserSW/inc/direction.h"
-#include "00_APP/UserSW/inc/IRsensor.h"
-#include "00_APP/UserSW/inc/motordriver.h"
-#include "00_APP/UserSW/inc/typedef.h"
-#include "00_APP/UserSW/inc/ultrasonic.h"
 
-UINT_8 ir_val;
-UINT_8 state = 1;
+/*********************************************************************************************************************/
+/*-------------------------------------------------Global variables--------------------------------------------------*/
+/*********************************************************************************************************************/
+UINT_8 ir_val = 0;
+UINT_8 state = 0;
+float ultrasonic_val;
 
-void line_tracer (void) {
+/*********************************************************************************************************************/
+/*---------------------------------------------Function Implementations----------------------------------------------*/
+/*********************************************************************************************************************/
+/* Main Application */
+void line_tracer(void)
+{
+    ir_val = IR_data();
+//    ultrasonic_val = ultrasonic_data();
+    ultrasonic_val = 4501;
 
-
-    while (1) {
-        ir_val = IR_data();
-        /*
-         * black line = 1
-         * white line = 0
-         * sensor   DEC_value   Handle Direction
-         * 0000     15          No_line
-         * 0001     8           hard_right
-         * 0011     12          hard_right
-         * 0010     4           soft_right
-         *
-         * 0110     6           Forward
-         *
-         * 1000     1           hard_left
-         * 1100     3           hard_left
-         * 0100     2           soft_left
-         *
-         **/
-
+    /*
+     * black line = 0
+     * white line = 1
+     * sensor   DEC_value   Handle Direction
+     * 0000     0          No_line
+     * 0011     3          hard_right
+     * 0010     2           soft_right
+     * 0111     7           right
+     *
+     * 1010     10           Forward
+     *
+     * 1000     8           hard_left
+     * 1100     12           hard_left
+     * 1101     13           soft_left
+     *
+     */
+    if (ultrasonic_val > 4500) {
         switch (ir_val) {
-            // 모든 센서 값 라인이 없을 경우
-            case 8:
-                MT_hard_left();
-                break;
-            case 4:
-                MT_soft_left();
+            case 0:
+            case 10:
+                MT_forward();
+                state = ir_val;
                 break;
             case 12:
+            case 13:
                 MT_hard_left();
-                break;
-            case 2:
-                MT_soft_right();
-                break;
-            case 6: // 직진
-                MT_forward();
-                break;
-            case 1:
-                MT_hard_right();
+                state = ir_val;
                 break;
             case 3:
+            case 7:
                 MT_hard_right();
+                state = ir_val;
                 break;
-            case 0:
-                ir_val = IR_data();
-                if (ir_val == 6) {
+            default:
+                if (state == 0 || state == 10) {
                     MT_forward();
-                } else if (ir_val > 0 || ir_val < 4) {
+                } else if (state == 12 || state == 13) {
                     MT_hard_left();
-                } else if (ir_val == 12 || ir_val == 4 || ir_val == 8) {
+                } else if (state == 3 || state == 7) {
                     MT_hard_right();
-                } else {
-                    MT_stop();
                 }
                 break;
         }
+    } else {
+        MT_stop();
     }
 }

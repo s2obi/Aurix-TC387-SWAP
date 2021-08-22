@@ -1,17 +1,21 @@
+/*********************************************************************************************************************/
+/*-----------------------------------------------------Includes------------------------------------------------------*/
+/*********************************************************************************************************************/
 #include "00_APP/UserSW/inc/ultrasonic.h"
-#include "00_APP/UserSW/inc/g_port.h"
 #include <time.h>
-#include "IfxPort.h"
-#include "Bsp.h"
 
-//implement
-void ultrasonic_init()
+/*********************************************************************************************************************/
+/*---------------------------------------------Function Implementations----------------------------------------------*/
+/*********************************************************************************************************************/
+/* Initialize Ultrasonic Sensor */
+void ultrasonic_init(void)
 {
     IfxPort_setPinModeOutput(TRIGPIN, IfxPort_OutputMode_pushPull, IfxPort_OutputIdx_general);
     IfxPort_setPinMode(ECHOPIN, IfxPort_Mode_inputPullDown);
 }
 
-float ultrasonic_data()
+/* Get data from Ultrasonic Sensor */
+float ultrasonic_data(void)
 {
     int start = 0, end = 0, time = 0;
     float distance = 0;

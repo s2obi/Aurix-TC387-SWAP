@@ -4,19 +4,18 @@
 /*********************************************************************************************************************/
 /*-----------------------------------------------------Includes------------------------------------------------------*/
 /*********************************************************************************************************************/
-#include <stdio.h>
-#include <string.h>
 #include "00_APP/UserSW/inc/g_port.h"
+#include "00_APP/UserSW/inc/Flash.h"
 #include "Ifx_Types.h"
 #include "IfxCan_Can.h"
 #include "IfxCan.h"
 #include "IfxCpu_Irq.h"
 #include "IfxPort.h"                                        /* For GPIO Port Pin Control                            */
+#include "Bsp.h"
 
 /*********************************************************************************************************************/
 /*------------------------------------------------------Macros-------------------------------------------------------*/
 /*********************************************************************************************************************/
-#define CAN_MESSAGE_ID              (uint32)0x777           /* Message ID that will be used in arbitration phase    */
 #define INVALID_RX_DATA_VALUE       0xA5                    /* Used to invalidate RX message data content           */
 #define INVALID_ID_VALUE            (uint32)0xFFFFFFFF      /* Used to invalidate RX message ID value               */
 #define ISR_PRIORITY_CAN_TX         2                       /* Define the CAN TX interrupt priority                 */
@@ -48,6 +47,11 @@ typedef struct
 /*********************************************************************************************************************/
 /*-----------------------------------------------Function Prototypes-------------------------------------------------*/
 /*********************************************************************************************************************/
+uint32 getDataFromAddrRecord(void);
+uint32 getAddrFromDataRecord(void);
+uint32 getDataFromDataRecord(void);
+void readRxDataUint32(void);
+void write_remain_page(void);
 void initCAN(void);
 void can00_send(const uint32 id, const char *msg, const uint32 length);
 

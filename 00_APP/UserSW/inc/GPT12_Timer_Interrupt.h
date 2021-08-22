@@ -1,16 +1,19 @@
-#ifndef USERSW_INC_IRSENSOR_H_
-#define USERSW_INC_IRSENSOR_H_
+#ifndef GPT12_TIMER_INTERRUPT_H_
+#define GPT12_TIMER_INTERRUPT_H_
 
 /*********************************************************************************************************************/
 /*-----------------------------------------------------Includes------------------------------------------------------*/
 /*********************************************************************************************************************/
 #include "00_APP/UserSW/inc/g_port.h"
-#include "00_APP/UserSW/inc/typedef.h"
+#include "00_APP/UserSW/inc/direction.h"
+#include "Ifx_Types.h"
+#include "IfxGpt12.h"
+#include "IfxPort.h"
 
 /*********************************************************************************************************************/
 /*-----------------------------------------------Function Prototypes-------------------------------------------------*/
 /*********************************************************************************************************************/
-void    IR_init     (void);
-UINT_8  IR_data     (void);
+void initGpt12Timer(void);                          /* Function to initialize the GPT12 Module and start the timer  */
+void interruptGpt12(void);                          /* Interrupt Service Routine of the GPT12                       */
 
-#endif /* USERSW_INC_IRSENSOR_H_ */
+#endif /* GPT12_TIMER_INTERRUPT_H_ */

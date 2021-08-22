@@ -15,6 +15,4 @@ typedef long long           INT_64;
 typedef float               FLOAT_32;
 typedef double              FLOAT_64;
 
-
-
 #endif /* USERSW_INC_TYPEDEF_H_ */
